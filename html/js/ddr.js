@@ -110,7 +110,7 @@ function start(){
         document.querySelector('.minigame .splash').classList.add('hidden');
         document.querySelector('.minigame .hack').classList.remove('hidden');    
         
-        
+        missKeys = 0
         maxErrors = 3
         
         valid_keys = difficulty[0].split('');
@@ -127,7 +127,7 @@ function start(){
 function resetEveryThing(){
     game_started = false;
 
-    setTimeout(function() { $(".minigame").fadeOut() }, 500);
+    // setTimeout(function() { $(".minigame").fadeOut() }, 500);
 
     resetTimer();
     clearTimeout(timer_start);
@@ -136,8 +136,8 @@ function resetEveryThing(){
     clearTimeout(timer_hide);
 
     
-    document.querySelector('.minigame .splash').classList.remove('hidden');
-    document.querySelector('.minigame').classList.remove('hidden');
+    document.querySelector('.minigame .splash').classList.add('hidden');
+    document.querySelector('.minigame').classList.add('hidden');
 
 }
 
@@ -159,7 +159,11 @@ function stopGame(status){
     }
     setTimeout(function() { 
         resetEveryThing();
-        $.post(`https://ddr/callback`, JSON.stringify({ 'success': status }));
+        if (status) {
+            $.post(`https://ddr/callback`, JSON.stringify({ 'success': status }));
+        } else {
+            $.post(`https://ddr/callback`, JSON.stringify({ 'fail': status }));
+        }
     }, 4000);
 }
 
@@ -209,7 +213,7 @@ document.addEventListener("keydown", function(ev) {
     switch (key_pressed) {
         case 'Escape':
             stopGame(false)
-            // $.post('https://ps-ui/var-callback', JSON.stringify({ 'success': false }));
+            $.post('https://ddr/callback', JSON.stringify({ 'fail': false }));
             
             break;
     }
