@@ -103,10 +103,11 @@ let createLetter = () => {
 }
 
 function start(){
-    document.querySelector('.minigame .text').innerHTML = 'Pattern recognition required...';
+    // document.querySelector('.minigame .text').innerHTML = 'Pattern recognition required...';
+    document.querySelector('.minigame .splash').classList.remove('hidden');
     document.querySelector('.minigame').classList.remove('hidden');
     
-    timer_start = sleep(1000, function(){
+    timer_start = sleep(3000, function(){
         document.querySelector('.minigame .splash').classList.add('hidden');
         document.querySelector('.minigame .hack').classList.remove('hidden');    
         
@@ -129,6 +130,7 @@ function resetEveryThing(){
 
     // setTimeout(function() { $(".minigame").fadeOut() }, 500);
 
+    clearLetters();
     resetTimer();
     clearTimeout(timer_start);
     clearTimeout(timer_game);
@@ -141,6 +143,18 @@ function resetEveryThing(){
 
 }
 
+function clearLetters() {
+    let lettersElem = document.querySelector('.minigame .letters');
+    letters.forEach(letter => {
+        letter.stop();
+    });
+    letters = [];
+    while (lettersElem.firstChild) {
+        lettersElem.removeChild(lettersElem.firstChild);
+    }
+}
+
+
 function stopGame(status){
     game_started = false;
     resetTimer();
@@ -151,18 +165,18 @@ function stopGame(status){
     if (status) {
         document.querySelector('.minigame .hack').classList.add('hidden');
         document.querySelector('.minigame .splash').classList.remove('hidden');
-        document.querySelector('.minigame .text').innerHTML = 'BY PASS';
+        document.querySelector('.minigame .text').innerHTML = 'Access Granted';
     } else {
         document.querySelector('.minigame .hack').classList.add('hidden');
         document.querySelector('.minigame .splash').classList.remove('hidden');
-        document.querySelector('.minigame .text').innerHTML = 'Failed';
+        document.querySelector('.minigame .text').innerHTML = 'Access Denied';
     }
     setTimeout(function() { 
         resetEveryThing();
         if (status) {
-            $.post(`https://ddr/callback`, JSON.stringify({ 'success': status }));
+            $.post(`https://${GetParentResourceName()}/callback`, JSON.stringify({ 'success': status }));
         } else {
-            $.post(`https://ddr/callback`, JSON.stringify({ 'fail': status }));
+            $.post(`https://${GetParentResourceName()}/callback`, JSON.stringify({ 'fail': status }));
         }
     }, 4000);
 }
@@ -213,7 +227,7 @@ document.addEventListener("keydown", function(ev) {
     switch (key_pressed) {
         case 'Escape':
             stopGame(false)
-            $.post('https://ddr/callback', JSON.stringify({ 'fail': false }));
+            $.post('https://${GetParentResourceName()}/callback', JSON.stringify({ 'fail': false }));
             
             break;
     }

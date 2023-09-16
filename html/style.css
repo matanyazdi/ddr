@@ -24,6 +24,10 @@ body{
     padding: 9px 12px 9px 5px;
 }
 .minigame{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: absolute;
     margin: 0 auto 20px;
     width: 640px;
     min-width: 640px;
@@ -33,7 +37,6 @@ body{
     max-height: 640px;
     background-color: #232832;
     padding: 0;
-    position: relative;
 }
 .splash{
     display: inline-block;
